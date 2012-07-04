@@ -1,0 +1,22 @@
+{
+  "name": "iservice",
+    "version": "0.0.1",
+    "author": "Aleafs Zhang (zhangxc83@gmail.com)",
+    "contributors": [
+      ],
+    "homepage": "git@github.com:aleafs/iservice.git",
+    "description": "A high speed file splitor on Node.js",
+    "keywords": [ "zookeeper", "config server", "service" ],
+    "dependencies": {},
+    "engines": {
+      "node": ">=0.6.9"
+    },
+    "devDependencies": {
+      "should"        : ">=0.4.2",
+      "mocha"         : ">=0.9.0"
+    },
+    "main"  : "./index.js",
+    "scripts": {
+      "test": "make test"
+    }
+}
