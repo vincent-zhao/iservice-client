@@ -19,6 +19,8 @@ exports.createClient = function (options) {
     return require(__dirname + '/lib/config.js').create(prefix, zk);
   };
 
-  return new Client();
+  var _me = new Client();
+
+  return _me;
 };
 
