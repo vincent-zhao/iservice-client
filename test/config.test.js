@@ -18,7 +18,7 @@ var _storer = function (data) {
   return _me;
 };
 
-describe('configer interface test', function () {
+describe('config interface', function () {
 
   /* {{{ should_configer_get_value_works_fine() */
   it('should_configer_get_value_works_fine', function (done) {
