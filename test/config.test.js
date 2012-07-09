@@ -7,6 +7,7 @@ var _storer = function (data) {
 
   var _me   = {};
   _me.get   = function (key, callback) {
+    key = key.replace(/\/{2,}/g, '/');
     callback(key.indexOf('error') > -1 ? new Error('TestError') : null, data[key]);
   };
 
