@@ -10,6 +10,10 @@ var _storer = function (data) {
     callback(key.indexOf('error') > -1 ? new Error('TestError') : null, data[key]);
   };
 
+  _me.watch = function (key, callback) {
+    callback((new Date()).getTime());
+  };
+
   return _me;
 };
 

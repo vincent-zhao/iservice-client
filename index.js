@@ -5,15 +5,15 @@ var Util    = require('util');
 
 exports.createClient = function (options) {
 
+  /**
+   * @zookeeper object
+   */
+  var zk = require(__dirname + '/lib/store.js').create(options);
+
   var Client = function () {
     Emitter.call(this);
   };
   Util.inherits(Client, Emitter);
-
-  /**
-   * @zookeeper object
-   */
-  var zk = require(__dirname + '/lib/zookeeper.js').create(options);
 
   Client.prototype.createConfig = function (prefix) {
     return require(__dirname + '/lib/config.js').create(prefix, zk);
