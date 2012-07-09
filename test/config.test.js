@@ -27,7 +27,7 @@ describe('configer interface test', function () {
     var _me = config.create('///app1/app2/', _storer({
     '/app1/app2/key1' : 'AbCd1我asd',
     '/app1/app2/key2' : '-123.3123',
-    '/app1/app2/key3' : '; this is comment\na = "b"\n[section1]\n\n\n\na = -1231.3  ',
+    '/app1/app2/key3' : '; this is comment\na = "b"\n[section1]\n\n\n\na = -1231.3  \r\nbb\r\nc="\\\'12"',
     '/app3/app2/key1' : 'abcd',
   }));
 
@@ -51,7 +51,7 @@ describe('configer interface test', function () {
       should.ok(!error);
       JSON.stringify(data).should.eql(JSON.stringify({
         'a' : 'b',
-        'section1' : {'a' : -1231.3}
+        'section1' : {'a' : -1231.3, 'c' : '\'12'}
       }));
       if ((--num) === 0) {
         done();
