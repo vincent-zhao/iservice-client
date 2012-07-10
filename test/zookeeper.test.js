@@ -15,19 +15,22 @@ describe('zookeeper interface', function () {
     });
   });
 
-  /* {{{ should_data_backup_info_local_file_works_fine() */
-  it('should_data_backup_info_local_file_works_fine', function (done) {
+  /* {{{ should_zookeeper_backup_and_get_works_fine() */
+  it('should_zookeeper_backup_and_get_works_fine', function (done) {
 
     var _zk = Zookeeper.create({
       'cache' : cache,
         'uuid' : 'test'
     });
 
-    var _fn = cache + '/test/i/am/not/exists.zk';
-    fs.readFile(_fn, 'utf-8', function (error, data) {
+    var key = '///i///am/not/exists';
+
+    _zk.get(key, function (error, data) {
       error.should.have.property('code', 'ENOENT');
+      should.ok(!data);
+
       _zk._backup('///i///am/not/exists', 'This is a demo ');
-      fs.readFile(_fn, 'utf-8', function (error, data) {
+      _zk.get(key, function (error, data) {
         should.ok(!error);
         data.should.eql('This is a demo ');
         done();
