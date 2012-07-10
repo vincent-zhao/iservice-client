@@ -26,9 +26,12 @@ describe('zookeeper interface', function () {
     var key = '///i///am/not/exists';
 
     _zk.get(key, function (error, data) {
-      error.should.have.property('code', 'ENOENT');
+      error.should.have.property('code', 'NotFound');
       should.ok(!data);
 
+      /**
+       * @ _backup is a private method, only for test
+       */
       _zk._backup('///i///am/not/exists', 'This is a demo ');
       _zk.cleanCache();
       _zk.get(key, function (error, data) {
@@ -41,6 +44,20 @@ describe('zookeeper interface', function () {
         });
       });
     });
+  });
+  /* }}} */
+
+  /* {{{ should_zookeeper_watch_path_works_fine() */
+  it('should_zookeeper_watch_path_works_fine', function (done) {
+    var _zk = Zookeeper.create({
+      'cache' : cache,
+        'uuid' : 'test'
+    });
+
+    _zk.watch('//META/trigger1', function (_old, _new) {
+      console.log(_new);
+      });
+    done();
   });
   /* }}} */
 

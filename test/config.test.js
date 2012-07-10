@@ -11,7 +11,7 @@ var _storer = function (data) {
     callback(key.indexOf('error') > -1 ? new Error('TestError') : null, data[key]);
   };
 
-  _me.watch = function (key, callback) {
+  _me.watch = function (key, options, callback) {
     callback((new Date()).getTime());
   };
 
@@ -27,8 +27,8 @@ var _storer = function (data) {
 
 describe('config interface', function () {
 
-  /* {{{ should_configer_get_value_works_fine() */
-  it('should_configer_get_value_works_fine', function (done) {
+  /* {{{ should_config_get_value_works_fine() */
+  it('should_config_get_value_works_fine', function (done) {
 
     var num = 4;
     var _me = config.create('///app1/app2/', _storer({
