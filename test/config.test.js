@@ -15,6 +15,13 @@ var _storer = function (data) {
     callback((new Date()).getTime());
   };
 
+  _me.dumpTree = function (prefix, callback) {
+    callback(null);
+  };
+
+  _me.cleanCache = function () {
+  };
+
   return _me;
 };
 

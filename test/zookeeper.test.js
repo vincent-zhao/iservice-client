@@ -30,10 +30,15 @@ describe('zookeeper interface', function () {
       should.ok(!data);
 
       _zk._backup('///i///am/not/exists', 'This is a demo ');
+      _zk.cleanCache();
       _zk.get(key, function (error, data) {
         should.ok(!error);
         data.should.eql('This is a demo ');
-        done();
+        _zk.get(key, function (error, data) {
+          should.ok(!error);
+          data.should.eql('This is a demo ');
+          done();
+        });
       });
     });
   });
