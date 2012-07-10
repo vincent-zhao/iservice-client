@@ -15,6 +15,10 @@ exports.createClient = function (options) {
   };
   Util.inherits(Client, Emitter);
 
+  Client.prototype.setEventHandle = function (evt, callback) {
+    this.on(evt, callback);
+  };
+
   Client.prototype.createConfig = function (prefix) {
     return require(__dirname + '/lib/config.js').create(prefix, zk);
   };
