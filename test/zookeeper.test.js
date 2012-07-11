@@ -6,7 +6,7 @@ var Zookeeper = require(__dirname + '/../lib/store.js');
 
 describe('zookeeper interface', function () {
 
-  var cache = __dirname + '/run/.cache';
+  var cache = __dirname + '/run/cache';
 
   beforeEach(function (done) {
     require('child_process').exec('rm -rf "' + cache + '"', {}, function (error, stdout, stderr) {
@@ -47,6 +47,21 @@ describe('zookeeper interface', function () {
   });
   /* }}} */
 
+  /* {{{ should_zookeeper_connect_error_works_fine() */
+  it('should_zookeeper_connect_error_works_fine', function (done) {
+    var _zk = Zookeeper.create({
+      'hosts' : 'localhost:2183',
+        'cache' : cache,
+        'uuid' : 'test'
+    });
+
+    _zk.sync('/', function (error) {
+      error.should.have.property('code', 'ConnectError');
+      done();
+    });
+  });
+  /* }}} */
+
   /* {{{ should_zookeeper_watch_path_works_fine() */
   it('should_zookeeper_watch_path_works_fine', function (done) {
     var _zk = Zookeeper.create({
@@ -54,13 +69,13 @@ describe('zookeeper interface', function () {
         'uuid' : 'test'
     });
 
-    _zk.watch('//META/trigger1', function (_old, _new) {
-      console.log(_new);
+    _zk.watch('//META/trigger1', function (now, pre) {
       });
     done();
   });
   /* }}} */
 
+  /* {{{ should_zookeeper_dump_tree_works_fine() */
   it('should_zookeeper_dump_tree_works_fine', function (done) {
     var _zk = Zookeeper.create({
       'hosts' : 'localhost:2181,localhost:2181',
@@ -68,11 +83,21 @@ describe('zookeeper interface', function () {
         'uuid' : 'test'
     });
 
+    var num = 2;
     _zk.sync('/', function (error) {
       should.ok(!error);
-      done();
+      if ((--num) === 0) {
+        done();
+      }
+    });
+    _zk.sync('/i/am/not/exists', function (error) {
+      error.should.have.property('code', 'ZookeeperError');
+      if ((--num) === 0) {
+        done();
+      }
     });
   });
+  /* }}} */
 
 });
 
