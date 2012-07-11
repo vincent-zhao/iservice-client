@@ -68,12 +68,10 @@ describe('zookeeper interface', function () {
         'uuid' : 'test'
     });
 
-    setTimeout(function () {
-      _zk.dumpTree('/', function (error) {
-        should.ok(!error);
-        done();
-      });
-    }, 200);
+    _zk.dumpTree('/', function (error) {
+      should.ok(!error);
+      done();
+    });
   });
 
 });
