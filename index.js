@@ -19,8 +19,8 @@ exports.createClient = function (options) {
     this.on(evt, callback);
   };
 
-  Client.prototype.createConfig = function (prefix) {
-    return require(__dirname + '/lib/config.js').create(prefix, zk);
+  Client.prototype.createConfig = function (prefix, conf) {
+    return require(__dirname + '/lib/config.js').create(prefix, conf, zk);
   };
 
   var _me = new Client();

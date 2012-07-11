@@ -68,7 +68,7 @@ describe('zookeeper interface', function () {
         'uuid' : 'test'
     });
 
-    _zk.dumpTree('/', function (error) {
+    _zk.sync('/', function (error) {
       should.ok(!error);
       done();
     });
