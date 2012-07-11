@@ -61,5 +61,20 @@ describe('zookeeper interface', function () {
   });
   /* }}} */
 
+  it('should_zookeeper_dump_tree_works_fine', function (done) {
+    var _zk = Zookeeper.create({
+      'hosts' : 'localhost:2181,localhost:2181',
+        'cache' : cache,
+        'uuid' : 'test'
+    });
+
+    setTimeout(function () {
+      _zk.dumpTree('/', function (error) {
+        should.ok(!error);
+        done();
+      });
+    }, 200);
+  });
+
 });
 
