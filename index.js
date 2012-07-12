@@ -15,6 +15,10 @@ exports.createClient = function (options) {
   };
   Util.inherits(Client, Emitter);
 
+  Client.prototype.getStorage = function () {
+    return zk;
+  };
+
   Client.prototype.setEventHandle = function (evt, callback) {
     this.on(evt, callback);
   };
