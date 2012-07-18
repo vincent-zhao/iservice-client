@@ -119,14 +119,17 @@ describe('zookeeper interface', function () {
     var value = (new Date()).getTime();
     _zk.rm('/key1', function (error) {
       should.ok(!error);
-      _zk.set('key1', value, function (error) {
+      _zk.set('key1', 'hello world', function (error) {
         should.ok(!error);
-        _zk._handle.a_get('/key1', false, function (rt, error, stat, data) {
-          rt.should.eql(0);
-          data.should.eql(value.toString());
-          if ((--num) == 0) {
-            done();
-          }
+        _zk.set('key1', value, function (error) {
+          should.ok(!error);
+          _zk._handle.a_get('/key1', false, function (rt, error, stat, data) {
+            rt.should.eql(0);
+            data.should.eql(value.toString());
+            if ((--num) == 0) {
+              done();
+            }
+          });
         });
       });
     });
