@@ -99,5 +99,22 @@ describe('zookeeper interface', function () {
   });
   /* }}} */
 
+  /* {{{ should_zookeeper_set_works_fine() */
+  it('should_zookeeper_set_works_fine', function (done) {
+    var _zk = Zookeeper.create({
+      'hosts' : 'localhost:2181,localhost:2181',
+        'cache' : cache,
+        'uuid' : 'test',
+        'readonly'  : false
+    });
+
+    var value = (new Date()).getTime();
+    _zk.set('/key1', value, function (error) {
+      should.ok(!error);
+      done();
+    });
+  });
+  /* }}} */
+
 });
 
