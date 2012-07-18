@@ -149,6 +149,45 @@ describe('zookeeper interface', function () {
         'readonly'  : false
     });
 
+    _zk.set('test/for/watch', 1, function (error) {
+      should.ok(!error);
+
+      var expect = 1;
+      _zk.watch('test/for/watch', 60000, function (now, prev) {
+        now = now - 0;
+        now.should.eql(expect);
+        if (3 === now) {
+          done();
+        }
+      });
+
+      _zk.set('test/for/watch', 2, function (error) {
+        should.ok(!error);
+        expect = 2;
+      });
+
+      _zk.set('test/for/watch', 2, function (error) {
+        should.ok(!error);
+        expect = 2;
+      });
+
+      _zk.set('test/for/watch', 3, function (error) {
+        should.ok(!error);
+        expect = 3;
+      });
+    });
+  });
+  /* }}} */
+
+  /* {{{ should_timer_watch_change_works_fine() */
+  it('should_timer_watch_change_works_fine', function (done) {
+    var _zk = Zookeeper.create({
+      'hosts' : 'localhost:2181,localhost:2181',
+        'cache' : cache,
+        'uuid' : 'test',
+        'readonly'  : false
+    });
+
     var num = 7;
 
     var expect  = null;
