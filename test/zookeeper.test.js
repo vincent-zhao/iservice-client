@@ -109,9 +109,13 @@ describe('zookeeper interface', function () {
     });
 
     var value = (new Date()).getTime();
-    _zk.set('/key1', value, function (error) {
+    _zk.set('key1', value, function (error) {
       should.ok(!error);
-      done();
+      _zk._handle.a_get('/key1', false, function (rt, error, stat, data) {
+        rt.should.eql(0);
+        data.should.eql(value.toString());
+        done();
+      });
     });
   });
   /* }}} */
