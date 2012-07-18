@@ -99,8 +99,8 @@ describe('zookeeper interface', function () {
   });
   /* }}} */
 
-  /* {{{ should_zookeeper_set_works_fine() */
-  it('should_zookeeper_set_works_fine', function (done) {
+  /* {{{ should_zookeeper_rm_and_set_works_fine() */
+  it('should_zookeeper_rm_and_set_works_fine', function (done) {
     var _zk = Zookeeper.create({
       'hosts' : 'localhost:2181,localhost:2181',
         'cache' : cache,
@@ -108,13 +108,26 @@ describe('zookeeper interface', function () {
         'readonly'  : false
     });
 
-    var value = (new Date()).getTime();
-    _zk.set('key1', value, function (error) {
+    var num = 2;
+    _zk.rm('i/am/not/exits', function (error) {
       should.ok(!error);
-      _zk._handle.a_get('/key1', false, function (rt, error, stat, data) {
-        rt.should.eql(0);
-        data.should.eql(value.toString());
+      if ((--num) == 0) {
         done();
+      }
+    });
+
+    var value = (new Date()).getTime();
+    _zk.rm('/key1', function (error) {
+      should.ok(!error);
+      _zk.set('key1', value, function (error) {
+        should.ok(!error);
+        _zk._handle.a_get('/key1', false, function (rt, error, stat, data) {
+          rt.should.eql(0);
+          data.should.eql(value.toString());
+          if ((--num) == 0) {
+            done();
+          }
+        });
       });
     });
   });
