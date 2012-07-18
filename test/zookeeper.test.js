@@ -62,19 +62,6 @@ describe('zookeeper interface', function () {
   });
   /* }}} */
 
-  /* {{{ should_zookeeper_watch_path_works_fine() */
-  it('should_zookeeper_watch_path_works_fine', function (done) {
-    var _zk = Zookeeper.create({
-      'cache' : cache,
-        'uuid' : 'test'
-    });
-
-    _zk.watch('//META/trigger1', function (now, pre) {
-      });
-    done();
-  });
-  /* }}} */
-
   /* {{{ should_zookeeper_dump_tree_works_fine() */
   it('should_zookeeper_dump_tree_works_fine', function (done) {
     var _zk = Zookeeper.create({
@@ -95,6 +82,23 @@ describe('zookeeper interface', function () {
       if ((--num) === 0) {
         done();
       }
+    });
+  });
+  /* }}} */
+
+  /* {{{ should_zookeepep_readonly_works_fine() */
+  it('should_zookeepep_readonly_works_fine', function (done) {
+    var _zk = Zookeeper.create({
+      'hosts' : 'localhost:2181,localhost:2181',
+        'cache' : cache,
+        'uuid' : 'test'
+    });
+    _zk.set('key1', 1234, function (error) {
+      error.should.have.property('code', 'ReadOnly');
+      _zk.rm('key1', function (error) {
+        error.should.have.property('code', 'ReadOnly');
+        done();
+      });
     });
   });
   /* }}} */
@@ -133,6 +137,51 @@ describe('zookeeper interface', function () {
         });
       });
     });
+  });
+  /* }}} */
+
+  /* {{{ should_zookeeper_watch_change_works_fine() */
+  it('should_zookeeper_watch_change_works_fine', function (done) {
+    var _zk = Zookeeper.create({
+      'hosts' : 'localhost:2181,localhost:2181',
+        'cache' : cache,
+        'uuid' : 'test',
+        'readonly'  : false
+    });
+
+    var num = 7;
+
+    var expect  = null;
+
+    _zk.rm('/key1', function (error) {
+      should.ok(!error);
+
+      /**
+       * @ watch a empty node
+       */
+      _zk.watch('/key1', 2, function (now, pre) {
+        should.ok(pre === undefined);
+        should.ok(now == expect);       // XXX: number vs string
+        if ((--num) === 0) {
+          (now - 0).should.eql(2);
+          done();
+        }
+      });
+
+      _zk.set('key1', 1, function (error) {
+        should.ok(!error);
+        expect = 1;
+
+        setTimeout(function () {
+          _zk.set('key1', 2, function (error) {
+            should.ok(!error);
+            expect = 2;
+          });
+        }, 5);
+      });
+
+    });
+
   });
   /* }}} */
 
