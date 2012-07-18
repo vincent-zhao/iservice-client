@@ -52,13 +52,20 @@ describe('zookeeper interface', function () {
     var _zk = Zookeeper.create({
       'hosts' : 'localhost:2183',
         'cache' : cache,
-        'uuid' : 'test'
+        'uuid' : 'test',
+        'readonly'  : false
     });
 
-    _zk.sync('/', function (error) {
+    var num = 2;
+    var callback = function (error) {
       error.should.have.property('code', 'ConnectError');
-      done();
-    });
+      if ((--num) === 0) {
+        done();
+      }
+    };
+
+    _zk.set('key1', 1, callback);
+    _zk.sync('/', callback);
   });
   /* }}} */
 
