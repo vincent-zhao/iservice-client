@@ -70,7 +70,7 @@ describe('zookeeper interface', function () {
   /* }}} */
 
   /* {{{ should_zookeeper_dump_tree_works_fine() */
-  xit('should_zookeeper_dump_tree_works_fine', function (done) {
+  it('should_zookeeper_dump_tree_works_fine', function (done) {
     var _zk = Zookeeper.create({
       'hosts' : 'localhost:2181,localhost:2181',
         'cache' : cache,
@@ -78,15 +78,15 @@ describe('zookeeper interface', function () {
     });
 
     var num = 2;
-    _zk.sync('/', function (error) {
-      console.log(error);
-      should.ok(!error);
+    _zk.sync('/i/am/not/exists/' + process.pid, function (error) {
+      error.should.have.property('code', 'ZookeeperError');
       if ((--num) === 0) {
         done();
       }
     });
-    _zk.sync('/i/am/not/exists', function (error) {
-      error.should.have.property('code', 'ZookeeperError');
+
+    _zk.sync('/', function (error) {
+      should.ok(!error);
       if ((--num) === 0) {
         done();
       }
