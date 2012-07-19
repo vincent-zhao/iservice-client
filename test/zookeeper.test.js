@@ -16,7 +16,7 @@ describe('zookeeper interface', function () {
   });
 
   /* {{{ should_zookeeper_backup_and_get_works_fine() */
-  it('should_zookeeper_backup_and_get_works_fine', function (done) {
+  xit('should_zookeeper_backup_and_get_works_fine', function (done) {
 
     var _zk = Zookeeper.create({
       'cache' : cache,
