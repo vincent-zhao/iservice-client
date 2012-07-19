@@ -69,31 +69,6 @@ describe('zookeeper interface', function () {
   });
   /* }}} */
 
-  /* {{{ should_zookeeper_dump_tree_works_fine() */
-  it('should_zookeeper_dump_tree_works_fine', function (done) {
-    var _zk = Zookeeper.create({
-      'hosts' : 'localhost:2181,localhost:2181',
-        'cache' : cache,
-        'uuid' : 'test'
-    });
-
-    var num = 2;
-    _zk.sync('/i/am/not/exists/' + process.pid, function (error) {
-      error.should.have.property('code', 'ZookeeperError');
-      if ((--num) === 0) {
-        done();
-      }
-    });
-
-    _zk.sync('/', function (error) {
-      should.ok(!error);
-      if ((--num) === 0) {
-        done();
-      }
-    });
-  });
-  /* }}} */
-
   /* {{{ should_zookeepep_readonly_works_fine() */
   it('should_zookeepep_readonly_works_fine', function (done) {
     var _zk = Zookeeper.create({
@@ -218,6 +193,31 @@ describe('zookeeper interface', function () {
 
     });
 
+  });
+  /* }}} */
+
+  /* {{{ should_zookeeper_dump_tree_works_fine() */
+  it('should_zookeeper_dump_tree_works_fine', function (done) {
+    var _zk = Zookeeper.create({
+      'hosts' : 'localhost:2181,localhost:2181',
+        'cache' : cache,
+        'uuid' : 'test'
+    });
+
+    var num = 2;
+    _zk.sync('/i/am/not/exists/' + process.pid, function (error) {
+      error.should.have.property('code', 'ZookeeperError');
+      if ((--num) === 0) {
+        done();
+      }
+    });
+
+    _zk.sync('/', function (error) {
+      should.ok(!error);
+      if ((--num) === 0) {
+        done();
+      }
+    });
   });
   /* }}} */
 
