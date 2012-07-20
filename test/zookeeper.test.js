@@ -206,9 +206,16 @@ describe('zookeeper interface', function () {
     });
 
     _zk.set('/test/key1', process.pid, function (error) {
-      var num = 2;
+      var num = 3;
       _zk.sync('/i/am/not/exists/' + process.pid, function (error) {
         error.should.have.property('code', 'ZookeeperError');
+        if ((--num) === 0) {
+          done();
+        }
+      });
+
+      _zk.sync('/', function (error) {
+        should.ok(!error);
         if ((--num) === 0) {
           done();
         }
