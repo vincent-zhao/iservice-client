@@ -201,22 +201,28 @@ describe('zookeeper interface', function () {
     var _zk = Zookeeper.create({
       'hosts' : 'localhost:2181,localhost:2181',
         'cache' : cache,
-        'uuid' : 'test'
+        'uuid' : 'test',
+        'readonly'  : false
     });
 
-    var num = 2;
-    _zk.sync('/i/am/not/exists/' + process.pid, function (error) {
-      error.should.have.property('code', 'ZookeeperError');
-      if ((--num) === 0) {
-        done();
-      }
-    });
+    _zk.set('/test/key1', process.pid, function (error) {
+      var num = 2;
+      _zk.sync('/i/am/not/exists/' + process.pid, function (error) {
+        error.should.have.property('code', 'ZookeeperError');
+        if ((--num) === 0) {
+          done();
+        }
+      });
 
-    _zk.sync('/', function (error) {
-      should.ok(!error);
-      if ((--num) === 0) {
-        done();
-      }
+      _zk.sync('/', function (error) {
+        should.ok(!error);
+        _zk.get('///test/key1', function (error, data) {
+          data.should.eql(process.pid.toString());
+          if ((--num) === 0) {
+            done();
+          }
+          });
+      });
     });
   });
   /* }}} */
