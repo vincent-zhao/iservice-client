@@ -25,9 +25,15 @@ var __mockeddata = {
 };
 
 var http = require('http').createServer(function (req, res) {
-  var url = req.url.split('/');
-  var ctl = url.shift();
+  var url = [];
+  req.url.split('?').shift().split('/').forEach(function (item) {
+    item = item.trim();
+    if ('' !== item) {
+      url.push(decodeURIComponent(item));
+    }
+  });
 
+  var ctl = url.shift();
   if ('api' === ctl) {
     var key = url.join('/');
     switch (url.shift()) {
@@ -57,7 +63,7 @@ var http = require('http').createServer(function (req, res) {
     }
   }
 
-  res.end(req.url);
+  res.end();
 }).listen(33750);
 
 /* }}} */
@@ -71,13 +77,21 @@ describe('iservice connect interface', function () {
       'user'    : 'unittest',
       'pass'    : '123456',
       'cache'   : __dirname + '/../run/cache',
-      'uuid'    : 'test',
+      'uuid'    : '{PID}',
+  });
+  /* }}} */
+
+  /* {{{ should_client_dump_and_get_works_fine() */
+  it('should_client_dump_and_get_works_fine', function (done) {
+    client.sync('/', function (error) {
+      done();
+    });
   });
   /* }}} */
 
   /* {{{ should_client_get_works_fine() */
   it('should_client_get_works_fine', function (done) {
-    client.get('/test/key1', function (error, data) {
+    client.get('/key1', function (error, data) {
       should.ok(!error);
       console.log(data.toString());
       done();
