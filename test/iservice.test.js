@@ -5,13 +5,13 @@ var should  = require('should');
 
 var http    = require('http').createServer(function (req, res) {
   res.end('hello world');
-}).listen(33749);
+}).listen(33750);
 
 describe('iservice connect interface', function () {
 
   /* {{{ client object */
   var client = require(__dirname + '/../lib/iservice.js').create({
-    'hosts' : '127.0.0.1,127.0.0.2',
+    'hosts' : '127.0.0.1:33750,127.0.0.2',
       'root'    : 'test',
       'user'    : 'unittest',
       'pass'    : '123456',
@@ -20,8 +20,14 @@ describe('iservice connect interface', function () {
   });
   /* }}} */
 
-  it('should_client_get_works_fine', function () {
+  /* {{{ should_client_get_works_fine() */
+  it('should_client_get_works_fine', function (done) {
+    client.get('/test/key1', function (error, data) {
+      console.log(error);
+      done();
+    });
   });
+  /* }}} */
 
 });
 
