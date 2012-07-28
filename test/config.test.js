@@ -13,12 +13,12 @@ var _storer = function (data) {
 
   _me.watch = function (key, timeout, callback) {
     setTimeout(function () {
-      callback(Date.now());
+      callback(key.indexOf('watcherror') > -1 ? new Error('WatchError') : null, Date.now());
     }, timeout || 10);
   };
 
   _me.sync = function (prefix, callback) {
-    callback(prefix.indexOf('error') > -1 ? new Error('SyncError') : null);
+    callback(prefix.indexOf('syncerror') > -1 ? new Error('SyncError') : null);
   };
 
   return _me;
@@ -86,10 +86,14 @@ describe('config interface', function () {
 
   /* {{{ should_config_set_event_handle_works_fine() */
   it('should_config_set_event_handle_works_fine', function (done) {
-    var _me = config.create('/error', {'timeout' : 5}, _storer({}));
+    var _me = config.create('/syncerror', {'timeout' : 5}, _storer({}));
     _me.setEventHandle('error', function (error) {
       error.toString().should.include('SyncError');
-      done();
+      var _me = config.create('/watcherror', {'timeout' : 5}, _storer({}));
+      _me.setEventHandle('error', function (error) {
+        error.toString().should.include('WatchError');
+        done();
+      });
     });
   });
   /* }}} */

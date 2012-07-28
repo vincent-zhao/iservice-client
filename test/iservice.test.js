@@ -45,6 +45,12 @@ var http = require('http').createServer(function (req, res) {
         break;
 
       case 'watch':
+        return setTimeout(function () {
+          res.end(JSON.stringify({
+            'error' : null,
+            'data'  : Date.now(),
+          }));
+        }, (req.headers.timeout || 1000) - 5);
         break;
 
       case 'tree':
@@ -91,6 +97,15 @@ describe('iservice connect interface', function () {
         meta.should.eql(1);
         done();
       });
+    });
+  });
+  /* }}} */
+
+  /* {{{ should_client_watch_works_fine() */
+  it('should_client_watch_works_fine', function (done) {
+    client.watch('/aa', 10, function (error, data) {
+      should.ok(!error);
+      done();
     });
   });
   /* }}} */
