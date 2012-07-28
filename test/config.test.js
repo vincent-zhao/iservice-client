@@ -11,12 +11,14 @@ var _storer = function (data) {
     callback(key.indexOf('error') > -1 ? new Error('TestError') : null, data[key]);
   };
 
-  _me.watch = function (key, callback) {
-    callback((new Date()).getTime());
+  _me.watch = function (key, timeout, callback) {
+    setTimeout(function () {
+      callback(Date.now());
+    }, timeout || 10);
   };
 
   _me.sync = function (prefix, callback) {
-    callback(null);
+    callback(prefix.indexOf('error') > -1 ? new Error('SyncError') : null);
   };
 
   return _me;
@@ -27,13 +29,24 @@ describe('config interface', function () {
   /* {{{ should_config_get_value_works_fine() */
   it('should_config_get_value_works_fine', function (done) {
 
-    var num = 4;
-    var _me = config.create('///app1/app2/', null, _storer({
-    '/app1/app2/key1' : 'AbCd1我asd',
-    '/app1/app2/key2' : '-123.3123',
-    '/app1/app2/key3' : '; this is comment\na = "b"\n[section1]\n\n\n\na = -1231.3  \r\nbb\r\nc="\\\'12"',
-    '/app3/app2/key1' : 'abcd',
-  }));
+    var num = 5;
+    var cfg = {
+      'timeout' : 10,
+    };
+
+    var _me = config.create('/app1/app2/', cfg, _storer({
+      '/app1/app2/key1' : 'AbCd1我asd',
+        '/app1/app2/key2' : '-123.3123',
+        '/app1/app2/key3' : '; this is comment\na = "b"\n[section1]\n\n\n\na = -1231.3  \r\nbb\r\nc="\\\'12"',
+        '/app3/app2/key1' : 'abcd',
+    }));
+
+    _me.setEventHandle('change', function (rev) {
+      should.ok(rev);
+      if ((--num) === 0) {
+        done();
+      }
+    });
 
     _me.get('key1', null, function (error, data) {
       should.ok(!error);
@@ -67,6 +80,16 @@ describe('config interface', function () {
       if ((--num) === 0) {
         done();
       }
+    });
+  });
+  /* }}} */
+
+  /* {{{ should_config_set_event_handle_works_fine() */
+  it('should_config_set_event_handle_works_fine', function (done) {
+    var _me = config.create('/error', {'timeout' : 5}, _storer({}));
+    _me.setEventHandle('error', function (error) {
+      error.toString().should.include('SyncError');
+      done();
     });
   });
   /* }}} */
