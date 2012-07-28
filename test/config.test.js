@@ -35,10 +35,10 @@ describe('config interface', function () {
     };
 
     var _me = config.create('/app1/app2/', cfg, _storer({
-      '/app1/app2/key1' : 'AbCd1我asd',
-        '/app1/app2/key2' : '-123.3123',
-        '/app1/app2/key3' : '; this is comment\na = "b"\n[section1]\n\n\n\na = -1231.3  \r\nbb\r\nc="\\\'12"',
-        '/app3/app2/key1' : 'abcd',
+      '/config/app1/app2/key1' : 'AbCd1我asd',
+        '/config/app1/app2/key2' : '-123.3123',
+        '/config/app1/app2/key3' : '; this is comment\na = "b"\n[section1]\n\n\n\na = -1231.3  \r\nbb\r\nc="\\\'12"',
+        '/config/app3/app2/key1' : 'abcd',
     }));
 
     _me.setEventHandle('change', function (rev) {
