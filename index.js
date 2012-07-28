@@ -10,21 +10,19 @@ exports.createClient = function (options) {
    */
   var zk = require(__dirname + '/lib/store.js').create(options);
 
+  var store = require(__dirname + '/lib/iservice.js').create();
+
   var Client = function () {
     Emitter.call(this);
   };
   Util.inherits(Client, Emitter);
-
-  Client.prototype.getStorage = function () {
-    return zk;
-  };
 
   Client.prototype.setEventHandle = function (evt, callback) {
     this.on(evt, callback);
   };
 
   Client.prototype.createConfig = function (prefix, conf) {
-    return require(__dirname + '/lib/config.js').create(prefix, conf, zk);
+    return require(__dirname + '/lib/config.js').create(prefix, conf, store);
   };
 
   var _me = new Client();
