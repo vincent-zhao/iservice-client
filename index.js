@@ -5,11 +5,6 @@ var Util    = require('util');
 
 exports.createClient = function (options) {
 
-  /**
-   * @zookeeper object
-   */
-  var zk = require(__dirname + '/lib/store.js').create(options);
-
   var store = require(__dirname + '/lib/iservice.js').create();
 
   var Client = function () {
