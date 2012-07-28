@@ -84,16 +84,13 @@ describe('iservice connect interface', function () {
   /* {{{ should_client_dump_and_get_works_fine() */
   it('should_client_dump_and_get_works_fine', function (done) {
     client.sync('/', function (error) {
-      done();
-    });
-  });
-  /* }}} */
-
-  /* {{{ should_client_get_works_fine() */
-  it('should_client_get_works_fine', function (done) {
-    client.get('/key1', function (error, data) {
       should.ok(!error);
-      done();
+      client.get('/test/key1', function (error, data, meta) {
+        should.ok(!error);
+        data.should.eql(1234);
+        meta.should.eql(1);
+        done();
+      });
     });
   });
   /* }}} */
