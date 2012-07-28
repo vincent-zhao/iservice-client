@@ -15,7 +15,7 @@ var __mockeddata = {
     'meta'  : 2,
   },
   '/test/key1/aa'   : {
-    'data'  : 'abcd',
+    'data'  : '{"a" : "abcd"}',
     'meta'  : 2,
   },
   '/test'   : {
@@ -93,7 +93,6 @@ describe('iservice connect interface', function () {
   it('should_client_get_works_fine', function (done) {
     client.get('/key1', function (error, data) {
       should.ok(!error);
-      console.log(data.toString());
       done();
     });
   });
