@@ -76,6 +76,14 @@ var http = require('http').createServer(function (req, res) {
 
 describe('iservice connect interface', function () {
 
+  beforeEach(function (done) {
+    var cmd = '/bin/rm -rf "' + __dirname + '/../run/cache"';
+    require('child_process').exec(cmd, {}, function (error) {
+      should.ok(!error);
+      done();
+    });
+  });
+
   /* {{{ client object */
   var client = require(__dirname + '/../lib/iservice.js').create({
     'hosts' : '127.0.0.1:33750',
