@@ -8,19 +8,19 @@ var should  = require('should');
 var __mockeddata = {
   '/test/key1'  : {
     'data'  : 1234,
-    'meta'  : 1,
+    'meta'  : {'v' : 1, 't' : 1},
   },
   '/test/key2'  : {
     'data'  : 5678,
-    'meta'  : 2,
+    'meta'  : {'v' : 2, 't' : 3},
   },
   '/test/key1/aa'   : {
     'data'  : '{"a" : "abcd"}',
-    'meta'  : 2,
+    'meta'  : {'v' : 2, 't' : 2},
   },
   '/test'   : {
     'data'  : '周华健',
-    'meta'  : 1,
+    'meta'  : {'v' : 1, 't' : 4},
   },
 };
 
@@ -102,7 +102,9 @@ describe('iservice connect interface', function () {
       client.get('/test/key1', function (error, data, meta) {
         should.ok(!error);
         data.should.eql(1234);
-        meta.should.eql(1);
+        JSON.stringify(meta).should.eql(JSON.stringify({
+          'v' : 1, 't' : 1
+        }));
         done();
       });
     });
