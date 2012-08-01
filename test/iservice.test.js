@@ -50,7 +50,7 @@ var http = require('http').createServer(function (req, res) {
             'error' : null,
             'data'  : Date.now(),
           }));
-        }, (req.headers.timeout || 1000) - 5);
+        }, (req.headers['x-app-tmout'] || 1000) - 5);
         break;
 
       case 'tree':
