@@ -5,7 +5,7 @@
     "contributors": [
       ],
     "homepage": "git@github.com:aleafs/iservice.git",
-    "description": "A high speed file splitor on Node.js",
+    "description": "config and server client on Node.js",
     "keywords": [ "zookeeper", "config server", "service" ],
     "dependencies": {
     },
