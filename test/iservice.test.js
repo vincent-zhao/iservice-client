@@ -86,10 +86,9 @@ describe('iservice connect interface', function () {
 
   /* {{{ client object */
   var client = require(__dirname + '/../lib/iservice.js').create({
-    'hosts' : '127.0.0.1:33750',
+    'host' : '127.0.0.1:33750',
       'root'    : '/',
-      'user'    : 'unittest',
-      'pass'    : '123456',
+      'token'   : 'unittest',
       'cache'   : __dirname + '/../run/cache',
       'uuid'    : '{PID}',
   });

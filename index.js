@@ -5,7 +5,7 @@ var Util    = require('util');
 
 exports.createClient = function (options) {
 
-  var store = require(__dirname + '/lib/iservice.js').create();
+  var store = require(__dirname + '/lib/iservice.js').create(options);
 
   var Client = function () {
     Emitter.call(this);
