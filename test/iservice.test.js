@@ -110,6 +110,22 @@ describe('iservice connect interface', function () {
   });
   /* }}} */
 
+  /* {{{ should_client_dump_and_get_bug_fixed_ok() */
+  it('should_client_dump_and_get_bug_fixed_ok', function (done) {
+      client.sync('/test', function (error) {
+        should.ok(!error);
+        client.get('/test/key1', function (error, data, meta) {
+          should.ok(!error);
+          data.should.eql(1234);
+          JSON.stringify(meta).should.eql(JSON.stringify({
+              'v' : 1, 't' : 1 
+              }));
+          done();
+          }); 
+        }); 
+      }); 
+  /* }}} */
+
   /* {{{ should_client_watch_works_fine() */
   it('should_client_watch_works_fine', function (done) {
     var num = 0;
