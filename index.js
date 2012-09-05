@@ -13,6 +13,7 @@ var connect = function () {
 
 exports.init = function (config) {
   options = config;
+  return exports;
 };
 
 exports.createConfig = function (prefix, config) {

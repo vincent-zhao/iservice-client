@@ -77,7 +77,7 @@ var http = require('http').createServer(function (req, res) {
 describe('iservice connect interface', function () {
 
   beforeEach(function (done) {
-    var cmd = '/bin/rm -rf "' + __dirname + '/../run/cache"';
+    var cmd = '/bin/rm -rf "' + __dirname + '/run/cache"';
     require('child_process').exec(cmd, {}, function (error) {
       should.ok(!error);
       done();
@@ -89,7 +89,7 @@ describe('iservice connect interface', function () {
     'host' : '127.0.0.1:33750',
       'root'    : '/',
       'token'   : 'unittest',
-      'cache'   : __dirname + '/../run/cache',
+      'cache'   : __dirname + '/run/cache',
       'uuid'    : '{PID}',
   });
   /* }}} */
