@@ -115,7 +115,7 @@ describe('iservice connect interface', function () {
   /* }}} */
 
   /* {{{ should_client_dump_and_get_bug(sync_not_root)_fixed_ok() */
-  it('should_client_dump_and_get_bug_fixed_ok', function (done) {
+  it('should_client_dump_and_get_bug(sync_not_root)_fixed_ok', function (done) {
       __mockeddata = {
         '/test/key1'  : {
           'data'  : 1234,
@@ -171,7 +171,7 @@ describe('iservice connect interface', function () {
   /* }}} */
 
   /* {{{ should_client_dump_and_get_bug(sync_path.zk_file_exist)_fixed_ok() */
-  it('should_client_dump_and_get_bug_fixed_ok', function (done) {
+  it('should_client_dump_and_get_bug(sync_path.zk_file_exist)_fixed_ok', function (done) {
       __mockeddata = {
         '/test/key1'  : {
           'data'  : 1234,
@@ -192,39 +192,32 @@ describe('iservice connect interface', function () {
       };
       client.sync('/test', function (error) {
         should.ok(!error);
-        client.get('/test/key1', function (error, data, meta) {
-          should.ok(!error);
-          data.should.eql(1234);
-          JSON.stringify(meta).should.eql(JSON.stringify({
-            'v' : 1, 't' : 1 
-          }));
-          client.get('/test', function (error, data, meta) {
-            data.should.eql("周华健");
-            __mockeddata = {
-              '/test/key1'  : {
-                'data'  : 1234,
-                'meta'  : {'v' : 1, 't' : 1},
-              },
-              '/test/key2'  : {
-                'data'  : 5678,
-                'meta'  : {'v' : 2, 't' : 3},
-              },
-              '/test/key1/aa'   : {
-                'data'  : '{"a" : "abcd"}',
-                'meta'  : {'v' : 2, 't' : 2},
-              },
-              '/test'   : {
-                'data'  : '周华健',
-                'meta'  : {'v' : 1, 't' : 4},
-              },
-              '/'   : {
-                'data'  : 3456,
-                'meta'  : {'v' : 1, 't' : 5},
-              },
-            };
-            done();
-          });
-        }); 
+        client.get('/test', function (error, data, meta) {
+          data.should.eql("周华健");
+          __mockeddata = {
+            '/test/key1'  : {
+              'data'  : 1234,
+              'meta'  : {'v' : 1, 't' : 1},
+            },
+            '/test/key2'  : {
+              'data'  : 5678,
+              'meta'  : {'v' : 2, 't' : 3},
+            },
+            '/test/key1/aa'   : {
+              'data'  : '{"a" : "abcd"}',
+              'meta'  : {'v' : 2, 't' : 2},
+            },
+            '/test'   : {
+              'data'  : '周华健',
+              'meta'  : {'v' : 1, 't' : 4},
+            },
+            '/'   : {
+              'data'  : 3456,
+              'meta'  : {'v' : 1, 't' : 5},
+            },
+          };
+          done();
+        });
       }); 
     }); 
   /* }}} */
