@@ -22,6 +22,10 @@ var __mockeddata = {
     'data'  : '周华健',
     'meta'  : {'v' : 1, 't' : 4},
   },
+  '/'   : {
+    'data'  : 3456,
+    'meta'  : {'v' : 1, 't' : 5},
+  },
 };
 
 var http = require('http').createServer(function (req, res) {
@@ -110,20 +114,112 @@ describe('iservice connect interface', function () {
   });
   /* }}} */
 
-  /* {{{ should_client_dump_and_get_bug_fixed_ok() */
-  it('should_client_dump_and_get_bug_fixed_ok', function (done) {
+  /* {{{ should_client_dump_and_get_bug(sync_not_root)_fixed_ok() */
+  it('should_client_dump_and_get_bug(sync_not_root)_fixed_ok', function (done) {
+      __mockeddata = {
+        '/test/key1'  : {
+          'data'  : 1234,
+          'meta'  : {'v' : 1, 't' : 1},
+        },
+        '/test/key2'  : {
+          'data'  : 5678,
+          'meta'  : {'v' : 2, 't' : 3},
+        },
+        '/test/key1/aa'   : {
+          'data'  : '{"a" : "abcd"}',
+          'meta'  : {'v' : 2, 't' : 2},
+        },
+        '/test'   : {
+          'data'  : '周华健',
+          'meta'  : {'v' : 1, 't' : 4},
+        }
+      };
       client.sync('/test', function (error) {
         should.ok(!error);
         client.get('/test/key1', function (error, data, meta) {
           should.ok(!error);
           data.should.eql(1234);
           JSON.stringify(meta).should.eql(JSON.stringify({
-              'v' : 1, 't' : 1 
-              }));
+            'v' : 1, 't' : 1 
+          }));
+          __mockeddata = {
+            '/test/key1'  : {
+              'data'  : 1234,
+              'meta'  : {'v' : 1, 't' : 1},
+            },
+            '/test/key2'  : {
+              'data'  : 5678,
+              'meta'  : {'v' : 2, 't' : 3},
+            },
+            '/test/key1/aa'   : {
+              'data'  : '{"a" : "abcd"}',
+              'meta'  : {'v' : 2, 't' : 2},
+            },
+            '/test'   : {
+              'data'  : '周华健',
+              'meta'  : {'v' : 1, 't' : 4},
+            },
+            '/'   : {
+              'data'  : 3456,
+              'meta'  : {'v' : 1, 't' : 5},
+            },
+          };
           done();
-          }); 
         }); 
       }); 
+    }); 
+  /* }}} */
+
+  /* {{{ should_client_dump_and_get_bug(sync_path.zk_file_exist)_fixed_ok() */
+  it('should_client_dump_and_get_bug(sync_path.zk_file_exist)_fixed_ok', function (done) {
+      __mockeddata = {
+        '/test/key1'  : {
+          'data'  : 1234,
+          'meta'  : {'v' : 1, 't' : 1},
+        },
+        '/test/key2'  : {
+          'data'  : 5678,
+          'meta'  : {'v' : 2, 't' : 3},
+        },
+        '/test/key1/aa'   : {
+          'data'  : '{"a" : "abcd"}',
+          'meta'  : {'v' : 2, 't' : 2},
+        },
+        '/test'   : {
+          'data'  : '周华健',
+          'meta'  : {'v' : 1, 't' : 4},
+        }
+      };
+      client.sync('/test', function (error) {
+        should.ok(!error);
+        client.get('/test', function (error, data, meta) {
+          data.should.eql("周华健");
+          __mockeddata = {
+            '/test/key1'  : {
+              'data'  : 1234,
+              'meta'  : {'v' : 1, 't' : 1},
+            },
+            '/test/key2'  : {
+              'data'  : 5678,
+              'meta'  : {'v' : 2, 't' : 3},
+            },
+            '/test/key1/aa'   : {
+              'data'  : '{"a" : "abcd"}',
+              'meta'  : {'v' : 2, 't' : 2},
+            },
+            '/test'   : {
+              'data'  : '周华健',
+              'meta'  : {'v' : 1, 't' : 4},
+            },
+            '/'   : {
+              'data'  : 3456,
+              'meta'  : {'v' : 1, 't' : 5},
+            },
+          };
+          done();
+        });
+      }); 
+    }); 
   /* }}} */
 
   /* {{{ should_client_watch_works_fine() */
@@ -137,6 +233,24 @@ describe('iservice connect interface', function () {
     });
   });
   /* }}} */
+
+  /*{{{ should_client_rmdir_works_fine() */
+  it('should_client_rmdir_works_fine', function (done) {
+    var root = __dirname + '/run/cache';
+    fs.mkdirSync(root);
+    fs.mkdirSync(root + '/dir_test');
+    fs.mkdirSync(root + '/dir_test/dir1');
+    fs.mkdirSync(root + '/dir_test/dir2');
+    fs.writeFileSync(root + '/dir_test/file1');
+    fs.writeFileSync(root + '/dir_test/dir1/file2');
+    require(__dirname + '/../lib/iservice.js').rmdir(root + '/dir_test');
+    try {
+      fs.statSync(root + '/dir_test');
+    } catch(e) {
+      done();
+    }
+  });
+  /*}}}*/
 
 });
 
