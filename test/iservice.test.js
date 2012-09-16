@@ -243,7 +243,7 @@ describe('iservice connect interface', function () {
     fs.mkdirSync(root + '/dir_test/dir2');
     fs.writeFileSync(root + '/dir_test/file1');
     fs.writeFileSync(root + '/dir_test/dir1/file2');
-    require(__dirname + '/../lib/iservice.js').rmdir(root + '/dir_test');
+    require(__dirname + '/../lib/tool.js').rmdir(root + '/dir_test');
     try {
       fs.statSync(root + '/dir_test');
     } catch(e) {
