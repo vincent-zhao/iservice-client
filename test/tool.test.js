@@ -21,6 +21,7 @@ describe('tool test', function () {
   });
   /*}}}*/
 
+/*
   it('should_isMin_works_fine', function (done) {
     var file = __dirname + '/run/tmp.js';
     var content = 
@@ -53,5 +54,6 @@ describe('tool test', function () {
       }
     });
   });
+  */
 
 });
