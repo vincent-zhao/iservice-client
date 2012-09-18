@@ -227,30 +227,12 @@ describe('iservice connect interface', function () {
     var num = 0;
     client.watch('/aa', 10, function (error, data) {
       should.ok(!error);
-      if ((++num) >= 2) {
+      if ((++num) === 2) {
         done();
       }
     });
   });
   /* }}} */
-
-  /*{{{ should_client_rmdir_works_fine() */
-  it('should_client_rmdir_works_fine', function (done) {
-    var root = __dirname + '/run/cache';
-    fs.mkdirSync(root);
-    fs.mkdirSync(root + '/dir_test');
-    fs.mkdirSync(root + '/dir_test/dir1');
-    fs.mkdirSync(root + '/dir_test/dir2');
-    fs.writeFileSync(root + '/dir_test/file1');
-    fs.writeFileSync(root + '/dir_test/dir1/file2');
-    require(__dirname + '/../lib/iservice.js').rmdir(root + '/dir_test');
-    try {
-      fs.statSync(root + '/dir_test');
-    } catch(e) {
-      done();
-    }
-  });
-  /*}}}*/
 
 });
 
