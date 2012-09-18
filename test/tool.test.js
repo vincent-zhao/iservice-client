@@ -21,39 +21,4 @@ describe('tool test', function () {
   });
   /*}}}*/
 
-/*
-  it('should_isMin_works_fine', function (done) {
-    var file = __dirname + '/run/tmp.js';
-    var content = 
-      'var tool = require(__dirname + \'/../../lib/tool.js\');' +
-      'setTimeout(function(){tool.isMin(function(error, min){console.log(min);});},1000);' + 
-      'setTimeout(function(){},3000);';
-    fs.writeFileSync(file, content);
-
-    var command = 'node ' + file;
-
-    var out1;
-    var out2;
-    exec(command, function (error, stdout, stderr) {
-      out1 = stdout;
-      if (out2 !== undefined) {
-        if ((out1 === 'true\n' && out2 === 'false\n') || (out1 === 'false\n' && out2 === 'true\n')) {
-          fs.unlinkSync(file);
-          done();
-        }
-      }
-    });
-
-    exec(command, function (error, stdout, stderr) {
-      out2 = stdout;
-      if (out1 !== undefined) {
-        if ((out1 === 'true\n' && out2 === 'false\n') || (out1 === 'false\n' && out2 === 'true\n')) {
-          fs.unlinkSync(file);
-          done();
-        }
-      }
-    });
-  });
-  */
-
 });
