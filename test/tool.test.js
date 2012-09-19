@@ -58,7 +58,6 @@ describe('tool test', function () {
   /*}}}*/
 
   /*{{{ should_dump_no_need_to_copy_works_fine() */
-  /*
   it('should_dump_no_need_to_copy_works_fine', function (done) {
     fs.mkdirSync(__dirname + '/run/1');
     fs.writeFileSync(__dirname + '/run/1/test', 'lalala');
@@ -89,7 +88,6 @@ describe('tool test', function () {
   /*}}}*/
 
   /*{{{ should_dump_need_to_copy_works_fine() */
-  /*
   it('should_dump_need_to_copy_works_fine', function (done) {
     fs.mkdirSync(__dirname + '/run/1');
     fs.writeFileSync(__dirname + '/run/1/test', 'lalala');
