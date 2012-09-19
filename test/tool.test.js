@@ -41,14 +41,12 @@ describe('tool test', function () {
     var command = 'node ' + file;
     var count = 2;
     exec(command, function (error, stdout, stderr) {
-      console.log(stdout);
       stdout.split(',').length.should.eql(2);
       if (--count === 0) {
         done();
       }
     });
     exec(command, function (error, stdout, stderr) {
-      console.log(stdout);
       stdout.split(',').length.should.eql(2);
       if (--count === 0) {
         done();
