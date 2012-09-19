@@ -64,7 +64,7 @@ describe('tool test', function () {
     fs.mkdirSync(__dirname + '/run/2');
     fs.writeFileSync(__dirname + '/run/2/test', 'lalala2');
 
-    var file = __dirname + '/run/tmp.js';
+    var file = __dirname + '/run/tmp2.js';
     var content = 
       'var tool = require(__dirname + \'/../../lib/tool.js\');' +
       'setTimeout(function(){tool.dump(__dirname, false, function(){console.log(\'finished!\');});},1000);' + 
@@ -95,7 +95,7 @@ describe('tool test', function () {
       fs.mkdirSync(__dirname + '/run/2');
       fs.writeFileSync(__dirname + '/run/2/test', 'lalala2');
 
-      var file = __dirname + '/run/tmp.js';
+      var file = __dirname + '/run/tmp3.js';
       var content = 
         'var tool = require(__dirname + \'/../../lib/tool.js\');' +
         'setTimeout(function(){tool.dump(__dirname, true, function(){console.log(\'finished!\');});},1000);' + 
