@@ -80,6 +80,7 @@ var http = require('http').createServer(function (req, res) {
 
 describe('iservice connect interface', function () {
 
+  /*{{{ beforeEach() */
   beforeEach(function (done) {
     var cmd = '/bin/rm -rf "' + __dirname + '/run/cache"';
     require('child_process').exec(cmd, {}, function (error) {
@@ -87,6 +88,7 @@ describe('iservice connect interface', function () {
       done();
     });
   });
+  /*}}}*/
 
   /* {{{ client object */
   var client = require(__dirname + '/../lib/iservice.js').create({
@@ -95,6 +97,7 @@ describe('iservice connect interface', function () {
       'token'   : 'unittest',
       'cache'   : __dirname + '/run/cache',
       'uuid'    : '{PID}',
+      'useold'  : false
   });
   /* }}} */
 
@@ -225,9 +228,12 @@ describe('iservice connect interface', function () {
   /* {{{ should_client_watch_works_fine() */
   it('should_client_watch_works_fine', function (done) {
     var num = 0;
+    var ok = false;
     client.watch('/aa', 10, function (error, data) {
+      if (ok) {return;}
       should.ok(!error);
       if ((++num) === 2) {
+        ok = true;
         done();
       }
     });
