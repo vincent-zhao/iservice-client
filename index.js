@@ -20,3 +20,7 @@ exports.createConfig = function (prefix, config) {
   return require(__dirname + '/lib/config.js').create(prefix, config, connect());
 };
 
+exports.createService = function () {
+  return require(__dirname + '/lib/service.js').create(options);
+}
+
