@@ -57,15 +57,15 @@ describe('tool test', function () {
 
   /*{{{ should_dump_no_need_to_copy_works_fine() */
   it('should_dump_no_need_to_copy_works_fine', function (done) {
-    fs.mkdirSync(__dirname + '/run/1');
-    fs.writeFileSync(__dirname + '/run/1/test', 'lalala');
-    fs.mkdirSync(__dirname + '/run/2');
-    fs.writeFileSync(__dirname + '/run/2/test', 'lalala2');
+    fs.mkdirSync(__dirname + '/run/test_prefix_1');
+    fs.mkdirSync(__dirname + '/run/test_prefix_2');
+    fs.writeFileSync(__dirname + '/run/test_prefix_1/test', 'lalala');
+    fs.writeFileSync(__dirname + '/run/test_prefix_2/test', 'lalala2');
 
     var file = __dirname + '/run/tmp2.js';
     var content = 
       'var tool = require(__dirname + \'/../../lib/tool.js\');' +
-      'setTimeout(function(){tool.dump(__dirname, false, function(){console.log(\'finished!\');});},1000);' + 
+      'setTimeout(function(){tool.dump(__dirname, \'test_prefix_\', false, function(){console.log(\'finished!\');});},1000);' + 
       'setTimeout(function(){},3000);';
     fs.writeFileSync(file, content);
     var command = 'node ' + file;
@@ -74,9 +74,9 @@ describe('tool test', function () {
       exec(command, function (error, stdout, stderr) {
         if (--count === 0) {
           try {
-            fs.statSync(__dirname + '/run/1');
+            fs.statSync(__dirname + '/run/test_prefix_1');
           } catch(e) {
-            fs.statSync(__dirname + '/run/2');
+            fs.statSync(__dirname + '/run/test_prefix_2');
             done();
           }
         }
@@ -87,16 +87,16 @@ describe('tool test', function () {
 
   /*{{{ should_dump_need_to_copy_works_fine() */
   it('should_dump_need_to_copy_works_fine', function (done) {
-    fs.mkdirSync(__dirname + '/run/1');
-    fs.writeFileSync(__dirname + '/run/1/test', 'lalala');
+    fs.mkdirSync(__dirname + '/run/test_prefix_1');
+    fs.writeFileSync(__dirname + '/run/test_prefix_1/test', 'lalala');
     setTimeout(function(){
-      fs.mkdirSync(__dirname + '/run/2');
-      fs.writeFileSync(__dirname + '/run/2/test', 'lalala2');
+      fs.mkdirSync(__dirname + '/run/test_prefix_2');
+      fs.writeFileSync(__dirname + '/run/test_prefix_2/test', 'lalala2');
 
       var file = __dirname + '/run/tmp3.js';
       var content = 
         'var tool = require(__dirname + \'/../../lib/tool.js\');' +
-        'setTimeout(function(){tool.dump(__dirname, true, function(){console.log(\'finished!\');});},1000);' + 
+        'setTimeout(function(){tool.dump(__dirname, \'test_prefix_\', true, function(){console.log(\'finished!\');});},1000);' + 
         'setTimeout(function(){},3000);';
       fs.writeFileSync(file, content);
       var command = 'node ' + file;
@@ -105,13 +105,13 @@ describe('tool test', function () {
         exec(command, function (error, stdout, stderr) {
           if (--count === 0) {
             try {
-              fs.statSync(__dirname + '/run/1');
+              fs.statSync(__dirname + '/run/test_prefix_1');
             } catch(e) {
-              fs.statSync(__dirname + '/run/2');
+              fs.statSync(__dirname + '/run/test_prefix_2');
               var folders = fs.readdirSync(__dirname + '/run');
               var num = 0;
               for (var i = 0; i < folders.length; i++) {
-                if (folders[i] !== '2' && fs.statSync(__dirname + '/run/' + folders[i]).isDirectory()) {
+                if (folders[i] !== 'test_prefix_2' && fs.statSync(__dirname + '/run/' + folders[i]).isDirectory()) {
                   num++;
                   fs.readFileSync(__dirname + '/run/' + folders[i] + '/test').toString().should.eql('lalala2');
                 }

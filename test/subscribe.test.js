@@ -18,7 +18,7 @@ describe('Subscribe test', function () {
 
   /*{{{ should_get_works_fine */
   it('should_get_works_fine', function (done) {
-    var obj = new Subscribe();
+    var obj = new Subscribe('test',{},{host:'127.0.0.1:80',cache:__dirname + '/run'});
     obj.start = function(){};
     obj.availables = ['addr1', 'addr2', 'addr3'];
 
@@ -33,15 +33,20 @@ describe('Subscribe test', function () {
   /*{{{ should_set_works_fine */
   it('should_set_works_fine', function (done) {
     var root = __dirname + '/run';
-    fs.mkdirSync(root + '/service_cache');
-    fs.mkdirSync(root + '/service_cache/' + process.pid);
-    fs.mkdirSync(root + '/service_cache/' + process.pid + '/1.0');
-    fs.mkdirSync(root + '/service_cache/' + process.pid + '/2.0');
-    fs.writeFileSync(root + '/service_cache/' + process.pid + '/1.0/1', JSON.stringify({data:JSON.stringify({addr:'127.0.0.1:80'})}));
-    fs.writeFileSync(root + '/service_cache/' + process.pid + '/2.0/1', JSON.stringify({data:JSON.stringify({addr:'127.0.0.1:90'})}));
+    fs.mkdirSync(root + '/iservice_cache_' + process.pid);
+    fs.mkdirSync(root + '/iservice_cache_' + process.pid + '/service_cache');
+    fs.mkdirSync(root + '/iservice_cache_' + process.pid + '/service_cache/service');
+    fs.mkdirSync(root + '/iservice_cache_' + process.pid + '/service_cache/service/app');
+    fs.mkdirSync(root + '/iservice_cache_' + process.pid + '/service_cache/service/app/1.0');
+    fs.mkdirSync(root + '/iservice_cache_' + process.pid + '/service_cache/service/app/2.0');
+    fs.writeFileSync(root + '/iservice_cache_' + process.pid + '/service_cache/service/app/1.0/1', JSON.stringify({data:JSON.stringify({addr:'127.0.0.1:80'})}));
+    fs.writeFileSync(root + '/iservice_cache_' + process.pid + '/service_cache/service/app/2.0/1', JSON.stringify({data:JSON.stringify({addr:'127.0.0.1:90'})}));
 
-    var obj = new Subscribe('test', {}, {
-      cache : root
+    var obj = new Subscribe('app', {}, {
+      host : '127.0.0.1:80',
+      root : '/',
+      cache : root,
+      folderPrefix : 'iservice_cache_',
     });
     obj.start = function(){};
     obj.set(function(){
@@ -64,7 +69,10 @@ describe('Subscribe test', function () {
       }
     }).listen(77899, function () {
       var obj = new Subscribe('test', {}, {
-        host : '127.0.0.1:77899'
+        host : '127.0.0.1:77899',
+        root : '/',
+        cache : __dirname + '/run',
+        folderPrefix : 'iservice_cache_',
       });
       obj.start = function(){}
       obj.check(function (err, data) {
@@ -81,7 +89,10 @@ describe('Subscribe test', function () {
   /*{{{ should_sync_works_fine */
   it('should_sync_works_fine', function (done) {
     var obj = new Subscribe('app1', {}, {
-      cache : __dirname + '/run'
+      host : '127.0.0.1:80',
+      root : '/',
+      cache : __dirname + '/run',
+      folderPrefix : 'iservice_cache_',
     });
     obj.start = function(){}
     var services = {
@@ -89,8 +100,8 @@ describe('Subscribe test', function () {
       '/service/app1/key1' : 'abcdefg',
     }
     obj.sync(services, function (err) {
-      fs.readFileSync(__dirname + '/run/service_cache/' + process.pid + '/service/app1.zk').toString().should.eql('\"abcdef\"');
-      fs.readFileSync(__dirname + '/run/service_cache/' + process.pid + '/service/app1/key1.zk').toString().should.eql('\"abcdefg\"');
+      fs.readFileSync(__dirname + '/run/iservice_cache_' + process.pid + '/service_cache/service/app1.zk').toString().should.eql('\"abcdef\"');
+      fs.readFileSync(__dirname + '/run/iservice_cache_' + process.pid + '/service_cache/service/app1/key1.zk').toString().should.eql('\"abcdefg\"');
       done();
     });
   });
@@ -103,7 +114,10 @@ describe('Subscribe test', function () {
         res.end('ok');
       }
     }).listen(77899, function () {
-      var obj = new Subscribe('test', {}, {});
+      var obj = new Subscribe('test', {}, {
+        host : '127.0.0.1:80',
+        folderPrefix : 'iservice_cache_',
+      });
       obj.start = function(){};
       obj.allServices = ['127.0.0.1:1234','127.0.0.1:77899'];
       obj.setHB({
