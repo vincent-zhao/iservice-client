@@ -5,7 +5,6 @@ var options = {
   host  : '127.0.0.1:2181',
   root  : '/',
   cache : __dirname + '/../run/cache',
-  folderPrefix : 'iservice_cache_',
   uuid  : process.pid,
   useold : true
 };
@@ -27,11 +26,11 @@ exports.init = function (config) {
     setTimeout(function(){
       var copy = false;
       try {
-        require('fs').statSync(options.cache + '/' + options.folderPrefix + process.pid);
+        require('fs').statSync(options.cache + '/iservice_cache_' + process.pid);
       } catch(e) {
         copy = true;
       }
-      require(__dirname + '/lib/tool.js').dump(options.cache, options.folderPrefix, copy);
+      require(__dirname + '/lib/tool.js').dump(options.cache, '/iservice_cache_', copy);
     }, 5000);
   }
 
@@ -43,7 +42,7 @@ exports.createConfig = function (prefix, config) {
 };
 
 exports.createService = function () {
-  return require(__dirname + '/lib/service.js').create(options);
+  return require(__dirname + '/lib/service.js').create(config, connect());
 }
 
 
