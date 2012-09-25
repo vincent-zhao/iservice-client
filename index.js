@@ -30,7 +30,7 @@ exports.init = function (config) {
       } catch(e) {
         copy = true;
       }
-      require(__dirname + '/lib/tool.js').dump(options.cache, '/iservice_cache_', copy);
+      require(__dirname + '/lib/tool.js').dump(options.cache, 'iservice_cache_', copy);
     }, 5000);
   }
 
