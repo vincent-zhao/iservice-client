@@ -76,8 +76,11 @@ describe('tool test', function () {
           try {
             fs.statSync(__dirname + '/run/test_prefix_1');
           } catch(e) {
-            fs.statSync(__dirname + '/run/test_prefix_2');
-            done();
+            try {
+              fs.statSync(__dirname + '/run/test_prefix_2');
+            } catch(e) {
+              done();
+            }
           }
         }
       });
@@ -104,21 +107,18 @@ describe('tool test', function () {
       for(var i = 0;i < 2; i++) {
         exec(command, function (error, stdout, stderr) {
           if (--count === 0) {
-            try {
-              fs.statSync(__dirname + '/run/test_prefix_1');
-            } catch(e) {
-              fs.statSync(__dirname + '/run/test_prefix_2');
-              var folders = fs.readdirSync(__dirname + '/run');
-              var num = 0;
-              for (var i = 0; i < folders.length; i++) {
-                if (folders[i] !== 'test_prefix_2' && fs.statSync(__dirname + '/run/' + folders[i]).isDirectory()) {
-                  num++;
-                  fs.readFileSync(__dirname + '/run/' + folders[i] + '/test').toString().should.eql('lalala2');
-                }
+            fs.statSync(__dirname + '/run/test_prefix_1');
+            fs.statSync(__dirname + '/run/test_prefix_2');
+            var folders = fs.readdirSync(__dirname + '/run');
+            var num = 0;
+            for (var i = 0; i < folders.length; i++) {
+              if (folders[i] !== 'test_prefix_1' && folders[i] !== 'test_prefix_2' && fs.statSync(__dirname + '/run/' + folders[i]).isDirectory()) {
+                num++;
+                fs.readFileSync(__dirname + '/run/' + folders[i] + '/test').toString().should.eql('lalala2');
               }
-              num.should.eql(2);
-              done();
             }
+            num.should.eql(2);
+            done();
           }
         });
       }
