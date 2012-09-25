@@ -6,7 +6,6 @@ var options = {
   root  : '/',
   cache : __dirname + '/../run/cache',
   uuid  : process.pid,
-  useold : true
 };
 
 var storage = null;
@@ -22,7 +21,7 @@ exports.init = function (config) {
     options[i] = config[i];
   }
 
-  if (options.useold) {
+  if (!options.not_copy) {
     setTimeout(function(){
       var copy = false;
       try {
