@@ -12,11 +12,29 @@ describe('service test', function () {
   it('should_get_works_fine', function (done) {
     var obj = new Service.Subscribe('test', {}, {'prefix':''}); 
     obj.start = function(){};
-    obj.availables = ['addr1', 'addr2', 'addr3'];
+    obj.availables = [{
+      'host' : 'host1',
+      'port' : 'port1'
+    },{
+      'host' : 'host2',
+      'port' : 'port2'
+    },{
+      'host' : 'host3',
+      'port' : 'port3'
+    }];
 
-    obj.get().should.eql('addr1');
-    obj.get().should.eql('addr2');
-    obj.get().should.eql('addr3');
+    obj.get().should.eql({
+      'host' : 'host1',
+      'port' : 'port1'
+    });
+    obj.get().should.eql({
+      'host' : 'host2',
+      'port' : 'port2'
+    });
+    obj.get().should.eql({
+      'host' : 'host3',
+      'port' : 'port3'
+    });
 
     done();
   });
@@ -29,11 +47,11 @@ describe('service test', function () {
         callback(null, {
           '/test' : {
             meta : 'meta1',
-            data : JSON.stringify({addr:"1.1.1.1:80"})
+            data : JSON.stringify({host:"1.1.1.1",port:80})
           },
           '/test/a' : {
             meta : 'meta2',
-            data : JSON.stringify({addr:"2.2.2.2:90"})
+            data : JSON.stringify({host:"2.2.2.2",port:90})
           }
         });
       }
@@ -57,13 +75,22 @@ describe('service test', function () {
     }).listen(77899, function () {
       var obj = new Service.Subscribe('test', {}, {'prefix':''});
       obj.start = function(){}
-      obj.allServices = ['127.0.0.1:1234','127.0.0.1:77899'];
+      obj.allServices = [{
+        host : '127.0.0.1',
+        port : 1234
+      },{
+        host : '127.0.0.1',
+        port : 77899 
+      }];
       obj.setHB({
         interval : 1000
       });
       setTimeout(function(){
         obj.availables.length.should.eql(1);
-        obj.availables[0].should.eql('127.0.0.1:77899');
+        obj.availables[0].should.eql({
+          host : '127.0.0.1',
+          port : 77899 
+        });
         server.close();
         done();
       }, 3000);
