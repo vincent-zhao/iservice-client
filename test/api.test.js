@@ -9,7 +9,7 @@ var Client  = require(__dirname + '/../').init({
   ,'token'  : ''
   ,'cache'  : __dirname + '/run/cache'
   ,'uuid'   : 'apitest'
-  ,'useold' : false
+  ,'not_copy' : true
 });
 
 describe('client api', function () {
