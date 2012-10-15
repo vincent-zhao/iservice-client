@@ -240,6 +240,20 @@ describe('iservice connect interface', function () {
   });
   /* }}} */
 
+  /*{{{ should_client_getTree_works_fine() */
+  it('should_client_getTree_works_fine', function (done) {
+    client.sync('/', function (error) {
+      should.ok(!error);
+      client.getTree('/', function (error, tree) {
+        should.ok(!error);
+        tree['/test']['data'].should.eql('周华健');
+        tree['/test/key1/aa']['data'].should.eql('{"a" : "abcd"}');
+        done();
+      });
+    });
+  });
+  /*}}}*/
+
 });
 
 after(function () {
