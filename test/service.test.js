@@ -43,8 +43,8 @@ describe('service test', function () {
   /*{{{ should_set_works_fine */
   it('should_set_works_fine', function (done) {
     var _store = {
-      getTree : function (root, callback) {
-        callback(null, {
+      getTree : function (root) {
+        return {
           '/test' : {
             meta : 'meta1',
             data : JSON.stringify({host:"1.1.1.1",port:80})
@@ -53,7 +53,7 @@ describe('service test', function () {
             meta : 'meta2',
             data : JSON.stringify({host:"2.2.2.2",port:90})
           }
-        });
+        };
       }
     }
     var obj = new Service.Subscribe('test', {}, {'prefix':''}, _store); 

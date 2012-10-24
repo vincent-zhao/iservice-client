@@ -105,14 +105,12 @@ describe('iservice connect interface', function () {
   it('should_client_dump_and_get_works_fine', function (done) {
     client.sync('/', function (error) {
       should.ok(!error);
-      client.get('/test/key1', function (error, data, meta) {
-        should.ok(!error);
-        data.should.eql(1234);
-        JSON.stringify(meta).should.eql(JSON.stringify({
-          'v' : 1, 't' : 1
-        }));
-        done();
-      });
+      var data = client.get('/test/key1');
+      data.data.should.eql(1234);
+      JSON.stringify(data.meta).should.eql(JSON.stringify({
+        'v' : 1, 't' : 1
+      }));
+      done();
     });
   });
   /* }}} */
@@ -139,36 +137,12 @@ describe('iservice connect interface', function () {
       };
       client.sync('/test', function (error) {
         should.ok(!error);
-        client.get('/test/key1', function (error, data, meta) {
-          should.ok(!error);
-          data.should.eql(1234);
-          JSON.stringify(meta).should.eql(JSON.stringify({
-            'v' : 1, 't' : 1 
-          }));
-          __mockeddata = {
-            '/test/key1'  : {
-              'data'  : 1234,
-              'meta'  : {'v' : 1, 't' : 1},
-            },
-            '/test/key2'  : {
-              'data'  : 5678,
-              'meta'  : {'v' : 2, 't' : 3},
-            },
-            '/test/key1/aa'   : {
-              'data'  : '{"a" : "abcd"}',
-              'meta'  : {'v' : 2, 't' : 2},
-            },
-            '/test'   : {
-              'data'  : '周华健',
-              'meta'  : {'v' : 1, 't' : 4},
-            },
-            '/'   : {
-              'data'  : 3456,
-              'meta'  : {'v' : 1, 't' : 5},
-            },
-          };
-          done();
-        }); 
+        var data = client.get('/test/key1');
+        data.data.should.eql(1234);
+        JSON.stringify(data.meta).should.eql(JSON.stringify({
+          'v' : 1, 't' : 1 
+        }));
+        done();
       }); 
     }); 
   /* }}} */
@@ -195,32 +169,9 @@ describe('iservice connect interface', function () {
       };
       client.sync('/test', function (error) {
         should.ok(!error);
-        client.get('/test', function (error, data, meta) {
-          data.should.eql("周华健");
-          __mockeddata = {
-            '/test/key1'  : {
-              'data'  : 1234,
-              'meta'  : {'v' : 1, 't' : 1},
-            },
-            '/test/key2'  : {
-              'data'  : 5678,
-              'meta'  : {'v' : 2, 't' : 3},
-            },
-            '/test/key1/aa'   : {
-              'data'  : '{"a" : "abcd"}',
-              'meta'  : {'v' : 2, 't' : 2},
-            },
-            '/test'   : {
-              'data'  : '周华健',
-              'meta'  : {'v' : 1, 't' : 4},
-            },
-            '/'   : {
-              'data'  : 3456,
-              'meta'  : {'v' : 1, 't' : 5},
-            },
-          };
-          done();
-        });
+        var data = client.get('/test');
+        data.data.should.eql('周华健');
+        done();
       }); 
     }); 
   /* }}} */
@@ -244,12 +195,10 @@ describe('iservice connect interface', function () {
   it('should_client_getTree_works_fine', function (done) {
     client.sync('/', function (error) {
       should.ok(!error);
-      client.getTree('/', function (error, tree) {
-        should.ok(!error);
-        tree['/test']['data'].should.eql('周华健');
-        tree['/test/key1/aa']['data'].should.eql('{"a" : "abcd"}');
-        done();
-      });
+      var tree = client.getTree('/');
+      tree['/test']['data'].should.eql('周华健');
+      tree['/test/key1/aa']['data'].should.eql('{"a" : "abcd"}');
+      done();
     });
   });
   /*}}}*/

@@ -8,7 +8,14 @@ var _storer = function (data) {
   var _me   = {};
   _me.get   = function (key, callback) {
     key = key.replace(/\/{2,}/g, '/');
-    callback(key.indexOf('error') > -1 ? new Error('TestError') : null, data[key]);
+    if (key.indexOf('error') > -1) {
+      return null;
+    } else {
+      return {
+        data : data[key],
+        meta : 'fake meta'
+      };
+    }
   };
 
   _me.watch = function (key, timeout, callback) {
@@ -48,39 +55,21 @@ describe('config interface', function () {
       }
     });
 
-    _me.get('key1', null, function (error, data) {
-      should.ok(!error);
-      data.should.eql('AbCd1我asd');
-      if ((--num) === 0) {
-        done();
-      }
-    });
+    var data = _me.get('key1');
+    data.should.eql('AbCd1我asd');
 
-    _me.get('key2', 'number', function (error, data) {
-      should.ok(!error);
-      data.should.eql(-123.3123);
-      if ((--num) === 0) {
-        done();
-      }
-    });
+    data = _me.get('key2', 'number');
+    data.should.eql(-123.3123);
 
-    _me.get('key3', 'ini', function (error, data) {
-      should.ok(!error);
-      JSON.stringify(data).should.eql(JSON.stringify({
-        'a' : 'b',
-        'section1' : {'a' : -1231.3, 'c' : '\'12'}
-      }));
-      if ((--num) === 0) {
-        done();
-      }
-    });
+    data = _me.get('key3', 'ini');
+    JSON.stringify(data).should.eql(JSON.stringify({
+      'a' : 'b',
+      'section1' : {'a' : -1231.3, 'c' : '\'12'}
+    }));
 
-    _me.get('error', null, function (error, data) {
-      error.toString().should.eql('Error: TestError');
-      if ((--num) === 0) {
-        done();
-      }
-    });
+    data = _me.get('error');
+    should.ok(!data);
+    done();
   });
   /* }}} */
 

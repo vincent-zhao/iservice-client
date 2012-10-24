@@ -21,10 +21,9 @@ describe('client api', function () {
       console.log(error);
     });
 
-    config.get('path/key1', '', function (error, data) {
-      error.should.have.property('name', 'NotFound');
-      done();
-    });
+    var data = config.get('path/key1');
+    should.ok(!data);
+    done();
 
   });
   /* }}} */
