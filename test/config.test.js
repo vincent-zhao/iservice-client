@@ -46,6 +46,10 @@ describe('config interface', function () {
         '/config/app1/app2/key2' : '-123.3123',
         '/config/app1/app2/key3' : '; this is comment\na = "b"\n[section1]\n\n\n\na = -1231.3  \r\nbb\r\nc="\\\'12"',
         '/config/app3/app2/key1' : 'abcd',
+        '/config/app1/app2/key4' : 'true',
+        '/config/app1/app2/key5' : 'false',
+        '/config/app1/app2/key6' : '[1, 2, 3, 4, 5]',
+        '/config/app1/app2/key7' : JSON.stringify({'key' : 'value'})
     }));
 
     _me.setEventHandle('change', function (rev) {
@@ -67,6 +71,18 @@ describe('config interface', function () {
       'section1' : {'a' : -1231.3, 'c' : '\'12'}
     }));
 
+    data = _me.get('key4', 'boolean');
+    data.should.be.true;
+
+    data = _me.get('key5', 'boolean');
+    data.should.be.false;
+
+    data = _me.get('key6', 'object');
+    data.should.eql([1, 2, 3, 4, 5]);
+
+    data = _me.get('key7', 'object');
+    data.should.eql({'key' : 'value'});
+    
     data = _me.get('error');
     should.ok(!data);
     done();
