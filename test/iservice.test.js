@@ -196,8 +196,10 @@ describe('iservice connect interface', function () {
     client.sync('/', function (error) {
       should.ok(!error);
       var tree = client.getTree('/');
-      tree['/test']['data'].should.eql('周华健');
-      tree['/test/key1/aa']['data'].should.eql('{"a" : "abcd"}');
+      var result = { 
+        '/test/key2': { data: 5678, meta: { v: 2, t: 3 } },
+        '/test/key1/aa': { data: '{"a" : "abcd"}', meta: { v: 2, t: 2 } }
+      }
       done();
     });
   });
