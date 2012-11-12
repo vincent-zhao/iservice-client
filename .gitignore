@@ -1,4 +1,5 @@
 coverage.html
 log
 run
+cov/
 node_modules

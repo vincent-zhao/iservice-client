@@ -4,19 +4,26 @@
     "author": "Aleafs Zhang (zhangxc83@gmail.com)",
     "contributors": [
       ],
-    "homepage": "git@github.com:aleafs/iservice.git",
+    "homepage": "https://github.com/vincent-zhao/iservice-client",
     "description": "config and server client on Node.js",
     "keywords": [ "zookeeper", "config server", "service" ],
-    "dependencies": {
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/vincent-zhao/iservice-client.git"
     },
-    "engines": {
-      "node": ">=0.6.9"
+    "bugs": {
+      "url": "https://github.com/vincent-zhao/iservice-client/issues"
+    },
+    "dependencies": {
     },
     "devDependencies": {
       "should"          : ">=0.4.2",
       "mocha"           : ">=0.9.0",
       "netblackhole"    : ">=0.0.2",
-      "visionmedia-jscoverage" : ">=1.0.0"
+      "jscover": "*"
+    },
+    "engines": {
+      "node": ">=0.6.9"
     },
     "main"  : "./index.js",
     "scripts": {
